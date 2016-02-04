@@ -15,6 +15,7 @@ class Btree
 	
 	public void insertNode(int data)
 	{
+		System.out.println("Inserting node "+data);
 		if(root == null)
 		{
 			root = new Node();
@@ -43,10 +44,17 @@ class Btree
 
 			Node temp = new Node();
 			temp.data = data;
+			System.out.println("Parent = "+prev.data);
 			if(prev.data>data)
-				prev.left=temp;
+				{
+					System.out.println("left child");
+					prev.left=temp;
+				}
 			else
-				prev.right=temp;
+				{
+					System.out.println("right child");
+					prev.right=temp;
+				}
 					
 		}
 	}	
@@ -91,16 +99,36 @@ class Btree
 		//if difference in height of sub-trees is more than 1 then the tree is not height balanced.
 		int hr = 0; //stores height of right subtree
 		int hl = 0; //stores height of left subtree
-
-		if(trav == null)
-		return 0;
+		
+		System.out.println("For node "+trav.data);
+		if((trav.left == null)&&(trav.right==null))
+		{
+			System.out.println("At leaf node "+trav.data);
+			return 1;
+		}
 
 		if(trav.left!=null)
-		hl=1+ifBalanced(trav.left);
+		{
+			int child_height = ifBalanced(trav.left);
+                        if((child_height<-1)||(child_height>1))
+                        {
+                                System.out.println("Tree is unbalanced at "+trav.data);
+                                return -2;
+                        }
+                        hl=1+child_height;
+		}
 
 		if(trav.right!=null)
-		hr=1+ifBalanced(trav.right);
-
+		{
+			int child_height = ifBalanced(trav.right);
+			if((child_height<-1)||(child_height>1))
+			{
+				System.out.println("Tree is unbalanced at "+trav.data);
+				return -2;
+			}
+			hr=1+child_height;
+		}
+		
 		return (hl-hr);
 	}
 	
@@ -114,7 +142,7 @@ public class BalancedTree
 		int choice = 0;
 
 		//Integer []in_arr=new Integer[];
-		int []in_arr2= new int[] {9,7,6,8,11,10,12};
+		int []in_arr2= new int[] {9,7,6,5,11,10,12};
 		Btree bt = new Btree();
 		for(int i=0; i < 7;i++)
 		{
